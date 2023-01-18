@@ -1,0 +1,101 @@
+= 示例文档
+yourname <yourname@example.com>
+{docdate}
+
+== 介绍
+
+这是一个 http://https://asciidoctor.org[Asciidoc] 示例文档。
+更多信息请查看 https://docs.asciidoctor.org/asciidoc/latest[AsciiDoc 语言文档]。
+
+== 转换文档
+
+通过使用 https://gradle.org/[gradle] 构建工具，
+可以很方便地将 Asciidoc 文档转换为 HTML 文档或 PDF 文档。
+更多信息请查看 https://asciidoctor.github.io/asciidoctor-gradle-plugin/development-3.x/user-guide[Asciidoctor Gradle 插件使用教程]。
+
+=== 转换为 HTML 文档
+
+在项目根目录，执行如下命令：
+
+[source,console]
+----
+$ ./gradlew asciidoctor
+----
+
+这将在 `build/docs/asciidoc` 目录里生成 `index.html`。
+
+=== 转换为 PDF 文档
+
+在项目根目录，执行如下命令：
+
+[source,console]
+----
+$ ./gradlew asciidoctorPdf
+----
+
+这将在 `build/docs/asciidoc` 目录里生成 `index.pdf`。
+
+== 演示
+
+下面将演示一些 Asciidoc 能实现的效果。
+
+=== 源代码高亮显示
+
+本项目通过 https://github.com/rouge-ruby/rouge[rouge] 代码高亮器来实现语法高亮。<<example-java-code>> 演示了一段 Java 代码是如何显示的。
+
+[[example-java-code]]
+.一段 Java 代码
+====
+[source,java]
+----
+/**
+ * Main Class
+ * @author Echcz
+ */
+public class App {
+    private static String message = "Hello World!!";
+
+    public static void main(String[] args) {
+        if (1 > 5) { // WTF?
+            System.out.println(message);
+        }
+    }
+}
+----
+====
+
+=== 插入图片
+
+在 Asciidoc 中插入图片的语法为 `image::<path of image>[<style?>]`。
+注意文档的的 `:imagesdir` 属性，这个属性定义了图片从哪个目录里寻找。
+
+在本项目中 `:imagesdir: images`
+
+.一张图片
+image::img01.jpg[scaledwidth=75%]
+
+=== 插入表格
+
+表格以 `|===` 行开始和结束，中间的内容为表格内容。在 Asciidoc 中，表格定义非常灵活强大，请查看 https://docs.asciidoctor.org/asciidoc/latest/syntax-quick-reference/#tables[Asciidoc 语言文档 - Tables] 以了解更多信息。
+
+.一个复杂的表格
+[cols="e,m,^,>s",width="25%"]
+|===
+|1 >s|2 |3 |4
+^|5 2.2+^.^|6 .3+<.>m|7
+^|8
+|9 2+>|10
+|===
+
+=== 各种提示信息
+
+
+TIP: 通过阅读 Asciidoc 官方文档，可以提高你对本项目的理解。
+
+NOTE: 要想正确地插入图片，请注意 `:imagesdir` 属性。
+
+IMPORTANT: 在不了解的情况下，不要随意删除文件。
+
+CAUTION: 确定永久删除本文件吗，些操作不可恢复。
+
+WARNING: 使用了过时的方法，此方法可能会在未来的版本中移除。

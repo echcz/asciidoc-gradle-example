@@ -1,0 +1,107 @@
+plugins {
+  id 'java'
+  id 'org.asciidoctor.jvm.gems' version '4.0.0-alpha.1'
+  id 'org.asciidoctor.jvm.convert' version '4.0.0-alpha.1'
+  id "org.asciidoctor.jvm.pdf" version "4.0.0-alpha.1"
+  id 'org.ajoberstar.git-publish' version '3.0.1'
+}
+
+version = '1.0.0'
+
+repositories {
+  mavenCentral()
+  ruby.gems()
+}
+
+dependencies {
+  asciidoctorGems 'rubygems:rouge:3.30.0'
+}
+
+asciidoctorj {
+  requires 'rouge'
+
+  attributes \
+    'revnumber': project.version,
+    'sourcedir': project.sourceSets.main.java.srcDirs[0],
+    'imagesdir': 'images',
+    'docinfodir': 'docinfos',
+    'docinfo': 'private,shared',
+    'source-highlighter': 'rouge',
+    'icons': 'font',
+    'idprefix': '',
+    'idseparator': '-',
+    'xrefstyle': 'full',
+    'toc': 'left',
+    'toclevels': '4',
+    'sectnums': 'all',
+    'sectnumlevels': '5',
+    'sectanchors': '',
+    'lang': 'zh',
+    'untitled-label': '未命名文档',
+    'version-label': '版本',
+    'last-update-label': '更新于',
+    'toc-title': '目录',
+    'chapter-refsig': '章',
+    'section-refsig': '节',
+    'part-refsig': '部分',
+    'appendix-refsig': '附录',
+    'appendix-caption': '附录',
+    'example-caption': '示例',
+    'figure-caption': '图',
+    'table-caption': '表',
+    'warning-caption': '警告',
+    'caution-caption': '小心',
+    'important-caption': '重要',
+    'note-caption': '注意',
+    'tip-caption': '提示'
+}
+
+asciidoctor {
+  dependsOn asciidoctorGemsPrepare
+
+  baseDirFollowsSourceFile()
+
+  sources {
+    include 'index.adoc'
+  }
+  resources {
+    from(sourceDir) {
+      include 'images/**'
+    }
+  }
+}
+
+asciidoctorPdf {
+  dependsOn asciidoctorGemsPrepare
+
+  baseDirFollowsSourceFile()
+
+  sources {
+    include 'index.adoc'
+  }
+
+  fontsDir = 'C:/Fonts' // 请保证指定文件夹中存在主题需要的字体文件。字体文件可从 https://github.com/echcz/FontsTTF 下载。
+  pdfThemes {
+    local 'cjk', {
+      themeDir = "${sourceDir}/themes"
+      themeName = 'cjk'
+    }
+  }
+  theme = 'cjk'
+}
+
+gitPublish {
+    repoUri = 'git@github.com:echcz/asciidoc-gradle-example.git'
+    branch = 'gh-pages'
+    repoDir = file('gh-pages')
+    contents {
+        from 'build/docs/asciidoc'
+    }
+    commitMessage = 'update pages'
+}
+
+task gitPublishPushAfterUpdate(type: GradleBuild) {
+    group = 'publishing'
+    tasks = ['asciidoctor', 'gitPublishPush']
+}
+

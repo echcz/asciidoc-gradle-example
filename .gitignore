@@ -1,0 +1,10 @@
+# Gradle
+.gradle
+build
+# Github Pages
+gh-pages
+# VSCode
+.vscode
+# IDEA
+.idea
+*.iml
